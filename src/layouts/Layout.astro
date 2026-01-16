@@ -1,5 +1,6 @@
 ---
 import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
 
 const { titre } = Astro.props;
 ---
@@ -18,10 +19,7 @@ const { titre } = Astro.props;
         <main class="flex-grow container p-4 w-full">
             <slot />
         </main>
-
-        <footer class="bg-gray-800 text-white font-semibold p-4 ">
-            <p>Voici mon footer</p>
-        </footer>
         
+        <Footer/>     
     </body>
 </html>
