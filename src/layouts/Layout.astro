@@ -5,22 +5,23 @@ const { titre } = Astro.props;
 ---
 
 <html lang="fr">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<title> {titre} </title>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <meta name="viewport" content="width=device-width" />
+        <title>{titre}</title>
     </head>
-    <body>
+    <body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col font-sans antialiased">
+        
         <Header/>
-        <main>
+
+        <main class="flex-grow container p-4 w-full">
             <slot />
         </main>
+
+        <footer class="bg-gray-800 text-white font-semibold p-4 ">
+            <p>Voici mon footer</p>
+        </footer>
+        
     </body>
-
-    <footer>
-		<p>Voici mon footer</p>
-	</footer>
 </html>
-
-
