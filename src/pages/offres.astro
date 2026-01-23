@@ -41,45 +41,45 @@ const offres = [
 ---
 
 <Layout titre="Offres">
-    <div class="p-4">
-        <h1 class="text-2xl mb-4">Offres</h1>
+    <div class="max-w-7xl mx-auto p-6">
+        <h1 class="text-4xl font-bold text-slate-800 mb-8">Nos Offres </h1>
 
-        <button id="favori-button" class="bg-slate-600 rounded-lg text-white p-2 mb-4">
-            Afficher les favoris
+        <button id="favori-button" class="bg-slate-800 hover:bg-indigo-600 text-white font-semibold py-2 px-6 rounded-full mb-8 transition-all duration-300 shadow-md flex items-center gap-2">
+            <span>✨</span> Afficher les favoris
         </button>
 
-        <div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {offres.map((offre) => (
-                <div class="offre" data-favori={offre.favori.toString()}>
+                <div 
+                    class="offre flex flex-col bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group hover:-translate-y-1" 
+                    data-favori={offre.favori.toString()}
+                >
                     <OffreCard offre={offre} />
                 </div>
             ))}
         </div>
     </div>
 
+    <script>
+        const button = document.getElementById('favori-button');
+        let showOnlyFavorites = false;
+        button?.addEventListener('click', () => {
+            showOnlyFavorites = !showOnlyFavorites;
+            const offres = document.querySelectorAll('.offre') as NodeListOf<HTMLElement>;
+            offres.forEach(offre => {
+                const isFavori = offre.dataset.favori === 'true';   
+                if (showOnlyFavorites && !isFavori) {
+                    offre.style.display = 'none';
+                } else {
+                    offre.style.display = ''; 
+                }
+            });
 
-<script>
-    const button = document.getElementById('favori-button');
-    let showOnlyFavorites = false;
-
-    button?.addEventListener('click', () => {
-        showOnlyFavorites = !showOnlyFavorites;
-        const offres = document.querySelectorAll('.offre') as NodeListOf<HTMLElement>;
-
-        offres.forEach(offre => {
-            const isFavori = offre.dataset.favori === 'true';
-            if (showOnlyFavorites && !isFavori) {
-                offre.style.display = 'none';
-            } else {
-                offre.style.display = '';
+            if (button) {
+                button.innerHTML = showOnlyFavorites 
+                    ? ' Afficher tout' 
+                    : ' Afficher les favoris';
             }
         });
-
-        if (button) {
-            button.textContent = showOnlyFavorites 
-                ? 'Afficher tout' 
-                : 'Afficher les favoris';
-        }
-    });
-</script>
+    </script>
 </Layout>
