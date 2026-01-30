@@ -1,16 +1,16 @@
 ---
-const { offre } = Astro.props;
+const  offre  = Astro.props.offre;
 ---
 
 <div>
-                <img src={offre.imgUrl} alt={offre.nomMaison} />
-                <h2>{offre.nomMaison}</h2>
+                <img src={offre.images} alt={offre.nom_maison} />
+                <h2>{offre.nom_maison}</h2>
                 <p>{offre.id}</p>
                 <p>Adresse : {offre.adresse}</p>
                 <ul>
                     <li>Prix : {offre.prix} €</li>
-                    <li>{offre.nbChambres} Chambres</li>
-                    <li>{offre.nbSdb} SDB</li>
+                    <li>{offre.nombre_chambre} Chambres</li>
+                    <li>{offre.nombre_salle_de_bain} SDB</li>
                     <li>{offre.surface} m²</li>
                 </ul>
                 {offre.favori && <span class="favori">★ Favori</span>}
