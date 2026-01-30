@@ -1,19 +1,23 @@
 ---
-const  offre  = Astro.props.offre;
+import PbImage from './PbImage.astro';
+const { offre } = Astro.props;
 ---
 
-<div>
-                <img src={offre.images} alt={offre.nom_maison} />
-                <h2>{offre.nom_maison}</h2>
-                <p>{offre.id}</p>
-                <p>Adresse : {offre.adresse}</p>
-                <ul>
-                    <li>Prix : {offre.prix} €</li>
-                    <li>{offre.nombre_chambre} Chambres</li>
-                    <li>{offre.nombre_salle_de_bain} SDB</li>
-                    <li>{offre.surface} m²</li>
-                </ul>
-                {offre.favori && <span class="favori">★ Favori</span>}
- </div>
+<div class="bg-white shadow-md rounded-xl overflow-hidden border border-slate-200 transition-hover duration-300 hover:shadow-lg">
+    <div class="w-full aspect-video overflow-hidden bg-slate-100">
+        <PbImage 
+            record={offre} 
+            recordImage={offre.images[0]} 
+            class="w-full h-full object-cover shadow-sm"
+        />
+    </div>
+    
+    <div class="p-4 text-center">
+        <h2 class="text-lg font-bold text-slate-800 tracking-wide">
+            {offre.nom_maison}
+        </h2>
+    </div>
+</div>
+
 
  
