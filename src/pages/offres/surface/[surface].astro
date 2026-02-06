@@ -1,0 +1,26 @@
+---
+import { getOffresParSurface } from '../../../js/backend.mjs';
+import Layout from "../../../layouts/Layout.astro";
+import OffreCard from '../../../components/OffreCard.astro'; 
+
+const { surface } = Astro.params;
+
+
+const offres = await getOffresParSurface(surface);
+---
+
+<Layout titre={`Maisons avec une surface > ${surface} m²`}>
+    <h2>Maisons de plus de {surface} m²</h2>
+
+    {offres.length > 0 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {offres.map((offre) => (
+                <OffreCard offre={offre} />
+            ))}
+        </div>
+    ) : (
+        <p>Aucune offre ne correspond à cette surface.</p>
+    )}
+
+    <a href="/offres" class="inline-block mt-4 text-blue-500">Retour à toutes les offres</a>
+</Layout>

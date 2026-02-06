@@ -27,3 +27,15 @@ export async function getOffre(id) {
         return null;
     }
 }
+
+export async function getOffresParSurface(surfaceMin) {
+    try {
+        const records = await db.collection('maison').getFullList({
+            filter: `surface >= ${surfaceMin}`,
+        });
+        return records;
+    } catch (error) {
+        console.log('Erreur lors du filtrage par surface', error);
+        return [];
+    }
+}
