@@ -1,21 +1,91 @@
 ---
+import '../../styles/global.css'
 import { getOffre } from '../../js/backend.mjs';
-import Layout from "../../layouts/Layout.astro";
+import Layout from '../../layouts/Layout.astro';
+import PbImage from '../../components/PbImage.astro';
 
 const { id } = Astro.params;
 const offre = await getOffre(id);
 
-
 if (!offre) {
-    console.error(`Offre with id ${id} not found`);
-    return Astro.redirect("/offres");
+   return Astro.redirect('/404');
 }
 ---
 
 <Layout titre={offre.nom_maison}>
-    <h2>{offre.nom_maison}</h2>
-    <ul>
-        <li>{offre.adresse}</li>
-        ...
-    </ul>
+  <main class="max-w-6xl mx-auto px-4 py-12">
+    
+    <a href="/offres" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium mb-6 transition-all group">
+      <span class="mr-2 transition-transform group-hover:-translate-x-1">←</span> 
+      Voir toutes les offres
+    </a>
+
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+      
+      <div class="grid grid-cols-3 gap-1 w-full aspect-[21/9] bg-slate-200 overflow-hidden relative">
+        
+        {offre.favori && (
+          <span class="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-pink-500 px-3 py-1 rounded-full text-sm font-bold shadow-md">
+            ★ Favori
+          </span>
+        )}
+
+        <PbImage 
+            record={offre} 
+            recordImage={offre.images[0]} 
+            class="w-full h-full object-cover col-span-2" 
+        />
+
+        <div class="grid grid-rows-2 gap-1 h-full">
+            <PbImage 
+                record={offre} 
+                recordImage={offre.images[1]} 
+                class="w-full h-full object-cover" 
+            />
+            <PbImage 
+                record={offre} 
+                recordImage={offre.images[2]} 
+                class="w-full h-full object-cover" 
+            />
+        </div>
+      </div>
+
+      <div class="p-8 md:p-12">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+          <div>
+            <h1 class="text-4xl font-black text-slate-900 tracking-tight">
+              {offre.nom_maison}
+            </h1>
+            <p class="text-lg text-slate-500 mt-2 flex items-center">
+              <span class="text-indigo-500 mr-2">📍</span> {offre.adresse}
+            </p>
+          </div>
+          <div class="bg-indigo-600 px-8 py-4 rounded-2xl shadow-lg shadow-indigo-100">
+             <span class="text-3xl font-black text-white">{offre.prix} €</span>
+          </div>
+        </div>
+
+        <hr class="border-slate-100 mb-8" />
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+          <div class="bg-slate-50 p-4 rounded-xl text-center">
+            <span class="block text-slate-400 text-sm uppercase font-semibold tracking-wider">Surface</span>
+            <span class="text-xl font-bold text-slate-800">{offre.surface} m²</span>
+          </div>
+          <div class="bg-slate-50 p-4 rounded-xl text-center">
+            <span class="block text-slate-400 text-sm uppercase font-semibold tracking-wider">Chambres</span>
+            <span class="text-xl font-bold text-slate-800">{offre.nombre_chambre}</span>
+          </div>
+          <div class="bg-slate-50 p-4 rounded-xl text-center">
+            <span class="block text-slate-400 text-sm uppercase font-semibold tracking-wider">Salles de bain</span>
+            <span class="text-xl font-bold text-slate-800">{offre.nombre_salle_de_bain}</span>
+          </div>
+          <div class="bg-slate-50 p-4 rounded-xl text-center">
+            <span class="block text-slate-400 text-sm uppercase font-semibold tracking-wider">Date</span>
+            <span class="text-xl font-bold text-slate-800">{new Date(offre.created).toLocaleDateString()}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
 </Layout>

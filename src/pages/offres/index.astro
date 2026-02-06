@@ -27,9 +27,14 @@ const offre = await getOffres();
         </div>
     </div>
 
-     <a href="/offres/surface/150">
-    Voir les maisons de plus de 150 m²
-</a>
+    <div class="flex justify-center my-8">
+    <a href="/offres/surface/150" class="group relative inline-flex items-center justify-center px-8 py-3 font-bold text-white transition-all duration-200 bg-indigo-600 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-indigo-700 shadow-lg">
+        Explorer les maisons de +150 m²
+        <svg class="w-5 h-5 ml-2 -mr-1 transition-transform group-hover:translate-x-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+        </svg>
+    </a>
+</div>
 
     <script>
         const button = document.getElementById('favori-button');
