@@ -36,6 +36,9 @@ const { offre } = Astro.props;
             {offre.nom_maison}
         </h2>
     </div>
+    <a href={`/offres/${offre.id}`} class="block text-center text-indigo-600 hover:text-indigo-800 font-medium py-2 transition-colors">
+        Voir plus
+    </a>
 </div>
 
 
