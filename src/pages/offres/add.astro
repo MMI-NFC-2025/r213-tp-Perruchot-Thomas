@@ -1,17 +1,13 @@
 ---
+import '../../styles/global.css'
 import Layout from '../../layouts/Layout.astro';
 import { addOffre } from '../../js/backend.mjs';
 
-let message = "";
+let message = '';
 if (Astro.request.method === "POST") {
-    try {
-        const formData = await Astro.request.formData();
-        const response = await addOffre(formData);
-        message = "L'offre a été ajoutée avec succès !";
-    } catch (error) {
-        message = "Une erreur est survenue lors de l'ajout.";
-        console.error(error);
-    }
+    const formData = await Astro.request.formData();
+    const response = await addOffre(formData);
+    message = response.message;
 }
 ---
 
