@@ -39,3 +39,20 @@ export async function getOffresParSurface(surfaceMin) {
         return [];
     }
 }
+
+export async function addOffre(house) {
+    try {
+        const record = await db.collection('Maison').create(house);
+        return {
+            success: true,
+            message: 'Offre ajoutée avec succès',
+            data: record
+        };
+    } catch (error) {
+        console.error('Erreur lors de l\'ajout de l\'offre', error);
+        return {
+            success: false,
+            message: 'Échec de l\'ajout de l\'offre'
+        };
+    }
+}

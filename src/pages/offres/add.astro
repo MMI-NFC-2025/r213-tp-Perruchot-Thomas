@@ -1,0 +1,72 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { addOffre } from '../../js/backend.mjs';
+
+let message = "";
+if (Astro.request.method === "POST") {
+    try {
+        const formData = await Astro.request.formData();
+        const response = await addOffre(formData);
+        message = "L'offre a été ajoutée avec succès !";
+    } catch (error) {
+        message = "Une erreur est survenue lors de l'ajout.";
+        console.error(error);
+    }
+}
+---
+
+<Layout titre="Ajouter une offre">
+    <div class="max-w-2xl mx-auto py-8">
+        <h1 class="text-2xl font-bold mb-6 text-slate-800">Ajouter une nouvelle offre</h1>
+        
+        {message && (
+            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-md border border-green-200">
+                {message}
+            </div>
+        )}
+
+        <form action="/offres/add" method="POST" enctype="multipart/form-data" class="space-y-4 bg-white p-6 rounded-lg shadow-sm border border-slate-200">
+            <div>
+                <label class="block text-sm font-semibold text-slate-700">Nom de la maison</label>
+                <input type="text" name="nom_maison" placeholder="Ex: Villa des Pins" required 
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700">Prix</label>
+                <input type="number" name="prix" placeholder="Prix en euros" required 
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700">Nb. Salles de bain</label>
+                    <input type="number" name="nombre_salle_de_bain" placeholder="2" 
+                           class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" />
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700">Nb. Chambres</label>
+                    <input type="number" name="nombre_chambre" placeholder="3" 
+                           class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" />
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700">Superficie (m²)</label>
+                <input type="number" name="surface" placeholder="120" 
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" />
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-slate-700">Images de la maison</label>
+                <input type="file" name="images" multiple
+                       class="w-full mt-1 p-2 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                <p class="text-xs text-slate-500 mt-1">Vous pouvez sélectionner plusieurs images.</p>
+            </div>
+            
+            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-md hover:bg-blue-700 transition-all shadow-md active:transform active:scale-[0.98]">
+                Ajouter l'offre
+            </button>
+        </form>
+    </div>
+</Layout>
