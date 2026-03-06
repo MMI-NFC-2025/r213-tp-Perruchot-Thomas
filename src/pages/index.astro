@@ -1,27 +1,80 @@
 ---
-import '../styles/global.css'
 import Layout from '../layouts/Layout.astro';
----
-	<Layout titre="Accueil">
-    <div class="max-w-7xl mx-auto px-4 py-12">
-        <hr class="border-gray-100 my-20" />
+import OffreCard from '../components/OffreCard.astro';
+import { getOffres } from '../js/backend.mjs';
+import '../styles/global.css';
 
-        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <div class="group border border-gray-100 p-12 hover:border-black transition-all duration-500">
-                <h3 class="text-xs uppercase tracking-[0.3em] font-bold text-gray-400 mb-4">Catalogue complet</h3>
-                <p class="text-2xl font-light mb-8 uppercase tracking-tighter">Découvrez l'intégralité de nos propriétés d'exception.</p>
-                <a href="/offres" class="inline-block text-[10px] uppercase tracking-[0.2em] font-bold border-b border-black pb-1 group-hover:text-gray-400 group-hover:border-gray-400 transition-all">
-                    Explorer les offres →
+// Récupération de toutes les maisons
+const toutesLesOffres = await getOffres();
+
+// Filtrage pour ne garder que les favoris
+const maisonsFavorites = toutesLesOffres.filter(offre => offre.favori === true);
+---
+
+<Layout titre="Accueil">
+    <main class="max-w-7xl mx-auto px-4 py-12">
+        <header class="mb-20">
+            <h1 class="text-7xl font-light uppercase tracking-tighter text-black leading-none mb-6">
+                L'Espace Redéfini.
+            </h1>
+            <p class="text-[10px] uppercase tracking-[0.3em] text-gray-400">
+                Architecture contemporaine & Immobilier d'exception.
+            </p>
+        </header>
+
+        <section class="mb-24">
+            <div class="flex justify-between items-end mb-10">
+                <h2 class="text-xs uppercase tracking-[0.3em] font-bold text-black">
+                    Sélection Coups de Cœur ({maisonsFavorites.length})
+                </h2>
+                <a href="/offres" class="text-[10px] uppercase tracking-[0.2em] border-b border-black pb-1 hover:text-gray-400 hover:border-gray-400 transition-all">
+                    Voir tout le catalogue
                 </a>
             </div>
+            
+            <div class="flex overflow-x-auto gap-8 pb-10 scrollbar-hide snap-x">
+                {maisonsFavorites.length > 0 ? (
+                    maisonsFavorites.map((maison) => (
+                        <div class="min-w-[300px] md:min-w-[450px] snap-start">
+                            <OffreCard offre={maison} />
+                        </div>
+                    ))
+                ) : (
+                    <div class="w-full py-20 border border-dashed border-gray-200 text-center">
+                        <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400 italic">
+                            Aucun bien n'est marqué en favori pour le moment.
+                        </p>
+                    </div>
+                )}
+            </div>
+        </section>
 
-            <div class="group border border-gray-100 p-12 hover:border-black transition-all duration-500">
-                <h3 class="text-xs uppercase tracking-[0.3em] font-bold text-gray-400 mb-4">Accompagnement</h3>
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+             <div class="group border border-gray-100 p-12 hover:border-black transition-all duration-500">
+                <h3 class="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-400 mb-4">Expertise</h3>
                 <p class="text-2xl font-light mb-8 uppercase tracking-tighter">Rencontrez nos agents experts pour votre projet.</p>
-                <a href="/Agent" class="inline-block text-[10px] uppercase tracking-[0.2em] font-bold border-b border-black pb-1 group-hover:text-gray-400 group-hover:border-gray-400 transition-all">
-                    Voir nos agents →
+                <a href="/agent" class="inline-block text-[10px] uppercase tracking-[0.2em] font-bold border-b border-black pb-1 group-hover:text-gray-400 group-hover:border-gray-400 transition-all">
+                    Découvrir l'équipe →
+                </a>
+            </div>
+            <div class="bg-black p-12 text-white">
+                <h3 class="text-[10px] uppercase tracking-[0.3em] font-bold text-gray-500 mb-4">Contact</h3>
+                <p class="text-2xl font-light mb-8 uppercase tracking-tighter">Vous avez un bien à proposer ?</p>
+                <a href="/offres/add" class="inline-block text-[10px] uppercase tracking-[0.2em] font-bold border-b border-white pb-1 hover:text-gray-400 hover:border-gray-400 transition-all">
+                    Ajouter une offre
                 </a>
             </div>
         </section>
-    </div>
+    </main>
 </Layout>
+
+<style>
+    /* Masquer la barre de défilement pour garder un look épuré */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>

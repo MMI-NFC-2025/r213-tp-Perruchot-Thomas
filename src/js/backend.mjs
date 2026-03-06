@@ -116,3 +116,14 @@ export async function allArtists() {
         return []; 
     }
 }
+
+export async function getOffresParAgent(agentId) {
+    try {
+        const offres = await db.collection('maison').getFullList({
+            filter: `relation = "${agentId}"`,
+        });
+        return offres;
+    } catch (error) {
+        return [];
+    }
+}

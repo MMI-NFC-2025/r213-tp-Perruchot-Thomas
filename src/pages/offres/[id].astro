@@ -23,16 +23,13 @@ if (!offre) {
     <div class="bg-white border border-gray-100 overflow-hidden relative">
       
       <button 
-          class="favoriteButton absolute top-6 left-6 z-30 bg-black text-white p-3 rounded-full hover:scale-110 transition-transform shadow-lg"
-          data-offre={JSON.stringify(offre)}
-      >
-          <img 
-              id="favorite-icon" 
-              src={offre.favori ? "/favorite_filled.png" : "/favorite.png"} 
-              alt="Favorite Icon" 
-              class="w-5 h-5 invert" 
-          />
-      </button>
+        class="favoriteButton absolute top-4 left-4 z-20 bg-black text-white p-2 rounded-full hover:scale-110 transition-transform shadow-lg flex items-center justify-center w-8 h-8"
+        data-offre={JSON.stringify(offre)}
+    >
+        <span id="favorite-icon" class="text-xs">
+            {offre.favori ? "★" : "☆"}
+        </span>
+    </button>
 
       <div class="grid grid-cols-3 gap-[1px] w-full aspect-[21/9] bg-gray-100 overflow-hidden relative border-b border-gray-100">
         
