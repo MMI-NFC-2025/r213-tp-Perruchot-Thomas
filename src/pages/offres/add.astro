@@ -12,57 +12,78 @@ if (Astro.request.method === "POST") {
 ---
 
 <Layout titre="Ajouter une offre">
-    <div class="max-w-2xl mx-auto py-8">
-        <h1 class="text-2xl font-bold mb-6 text-slate-800">Ajouter une nouvelle offre</h1>
+    <div class="max-w-2xl mx-auto">
+        <h1 class="text-4xl font-light uppercase tracking-tighter mb-12 text-black">
+            Nouvelle Offre.
+        </h1>
         
         {message && (
-            <div class="mb-4 p-4 bg-green-100 text-green-800 rounded-md border border-green-200">
+            <div class={`mb-8 p-4 text-[10px] uppercase tracking-widest border ${message.includes('succès') 
+                ? 'bg-white border-black text-black' 
+                : 'bg-gray-50 border-gray-200 text-gray-500'}`}>
                 {message}
             </div>
         )}
 
-        <form action="/offres/add" method="POST" enctype="multipart/form-data" class="space-y-4 bg-white p-6 rounded-lg shadow-sm border border-slate-200">
-            <div>
-                <label class="block text-sm font-semibold text-slate-700">Nom de la maison</label>
-                <input type="text" name="nom_maison" placeholder="Ex: Villa des Pins" required 
-                       class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" />
-            </div>
-
-            <div>
-                <label class="block text-sm font-semibold text-slate-700">Prix</label>
-                <input type="number" name="prix" placeholder="Prix en euros" required 
-                       class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" />
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
+        <form action="/offres/add" method="POST" enctype="multipart/form-data" class="space-y-10">
+            <div class="space-y-6">
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700">Nb. Salles de bain</label>
-                    <input type="number" name="nombre_salle_de_bain" placeholder="2" 
-                           class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" />
+                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-2">Nom de la maison</label>
+                    <input type="text" name="nomMaison" placeholder="Ex: Villa Minimaliste" required 
+                           class="w-full border-b border-gray-200 focus:border-black p-2 bg-transparent outline-none transition-colors text-sm" />
                 </div>
+
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700">Nb. Chambres</label>
-                    <input type="number" name="nombre_chambre" placeholder="3" 
-                           class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" />
+                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-2">Adresse</label>
+                    <input type="text" name="adresse" placeholder="Ex: 123 Rue du Design, Paris" required 
+                           class="w-full border-b border-gray-200 focus:border-black p-2 bg-transparent outline-none transition-colors text-sm" />
+                </div>
+
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-2">Prix (€)</label>
+                    <input type="number" name="prix" placeholder="0.00" required 
+                           class="w-full border-b border-gray-200 focus:border-black p-2 bg-transparent outline-none transition-colors text-sm" />
                 </div>
             </div>
 
-            <div>
-                <label class="block text-sm font-semibold text-slate-700">Superficie (m²)</label>
-                <input type="number" name="surface" placeholder="120" 
-                       class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 outline-none" />
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-2">Salles de bain</label>
+                    <input type="number" name="nbSdb" placeholder="2" 
+                           class="w-full border-b border-gray-200 focus:border-black p-2 bg-transparent outline-none transition-colors text-sm" />
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-2">Chambres</label>
+                    <input type="number" name="nbChambres" placeholder="3" 
+                           class="w-full border-b border-gray-200 focus:border-black p-2 bg-transparent outline-none transition-colors text-sm" />
+                </div>
+                <div>
+                    <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-2">Superficie (m²)</label>
+                    <input type="number" name="surface" placeholder="120" 
+                           class="w-full border-b border-gray-200 focus:border-black p-2 bg-transparent outline-none transition-colors text-sm" />
+                </div>
             </div>
 
-            <div>
-                <label class="block text-sm font-semibold text-slate-700">Images de la maison</label>
-                <input type="file" name="images" multiple
-                       class="w-full mt-1 p-2 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-                <p class="text-xs text-slate-500 mt-1">Vous pouvez sélectionner plusieurs images.</p>
+            <div class="pt-4">
+                <label class="block text-[10px] uppercase tracking-[0.2em] font-bold text-gray-400 mb-4">Images du bien</label>
+                <div class="relative border-2 border-dashed border-gray-100 p-8 text-center hover:border-black transition-colors group">
+                    <input type="file" name="image" multiple
+                           class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
+                    <p class="text-[10px] uppercase tracking-widest text-gray-400 group-hover:text-black transition-colors">
+                        Glisser ou sélectionner les fichiers
+                    </p>
+                </div>
             </div>
             
-            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-md hover:bg-blue-700 transition-all shadow-md active:transform active:scale-[0.98]">
-                Ajouter l'offre
+            <button type="submit" class="w-full bg-black text-white text-[10px] uppercase tracking-[0.3em] font-bold py-5 hover:bg-gray-800 transition-all shadow-sm">
+                Enregistrer l'offre
             </button>
         </form>
+        
+        <div class="mt-12 text-center">
+            <a href="/offres" class="text-[10px] uppercase tracking-[0.2em] text-gray-400 hover:text-black transition-colors border-b border-transparent hover:border-black pb-1">
+                Annuler et revenir
+            </a>
+        </div>
     </div>
 </Layout>

@@ -3,44 +3,73 @@ import PbImage from './PbImage.astro';
 const { offre } = Astro.props;
 ---
 
-<div class="bg-white shadow-md rounded-xl overflow-hidden border border-slate-200 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 relative group">
+<div class="bg-white border border-gray-100 overflow-hidden transition-all duration-500 hover:border-black relative group">
     
-    {offre.favori && (
-        <span class="absolute top-2 right-2 z-10 bg-white/90 text-pink-500 px-2 py-1 rounded-full text-sm font-bold shadow-sm">
-            ★ Favori
+    <button 
+        class="favoriteButton absolute top-4 left-4 z-20 bg-black text-white p-2 rounded-full hover:scale-110 transition-transform shadow-lg flex items-center justify-center w-8 h-8"
+        data-offre={JSON.stringify(offre)}
+    >
+        <span id="favorite-icon" class="text-xs">
+            {offre.favori ? "★" : "☆"}
         </span>
-    )}
+    </button>
 
-
-    <div class="grid grid-cols-3 gap-0.5 w-full aspect-video bg-slate-100 overflow-hidden">
+    <div class="grid grid-cols-3 gap-[1px] w-full aspect-video bg-gray-100 overflow-hidden border-b border-gray-100">
         <PbImage 
             record={offre} 
-            recordImage={offre.images[0]} 
-            class="w-full h-full object-cover shadow-sm col-span-2" 
+            recordImage={offre.image?.[0]} 
+            class="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105 col-span-2" 
         />
-        <div class="grid grid-rows-2 gap-0.5 h-full">
+        <div class="grid grid-rows-2 gap-[1px] h-full">
             <PbImage 
                 record={offre} 
-                recordImage={offre.images[1]} 
-                class="w-full h-full object-cover shadow-sm" 
+                recordImage={offre.image?.[1]} 
+                class="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0" 
             />
             <PbImage 
                 record={offre} 
-                recordImage={offre.images[2]} 
-                class="w-full h-full object-cover shadow-sm" 
+                recordImage={offre.image?.[2]} 
+                class="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0" 
             />
         </div>
     </div>
     
-    <div class="p-4 text-center">
-        <h2 class="text-lg font-bold text-slate-800 tracking-wide group-hover:text-indigo-600 transition-colors">
-            {offre.nom_maison}
+    <div class="p-6 text-left">
+        <h2 class="text-sm uppercase tracking-[0.15em] font-bold text-black mb-1">
+            {offre.nomMaison}
         </h2>
+        <p class="text-xs text-gray-400 uppercase tracking-widest mb-4">
+            {offre.surface} m² — {offre.prix.toLocaleString()} €
+        </p>
+        
+        <a href={`/offres/${offre.id}`} class="inline-block text-[10px] uppercase tracking-[0.2em] font-bold border-b border-black pb-1 hover:text-gray-400 hover:border-gray-400 transition-all">
+            Découvrir le bien
+        </a>
     </div>
-    <a href={`/offres/${offre.id}`} class="block text-center text-indigo-600 hover:text-indigo-800 font-medium py-2 transition-colors">
-        Voir plus
-    </a>
 </div>
 
+<script>
+    //@ts-nocheck
+    import { setFavori } from "../js/backend.mjs";
+    
+    const favoriteButtons = document.querySelectorAll(".favoriteButton");
 
- 
+    favoriteButtons.forEach(button => {
+        button.addEventListener('click', async (e) => {
+            e.preventDefault(); 
+            
+            const offreData = JSON.parse(button.dataset.offre || '{}');
+            const newFavori = !offreData.favori;
+
+            await setFavori(offreData);
+
+            const favIcon = button.querySelector('#favorite-icon');
+            if (favIcon) {
+                favIcon.textContent = newFavori ? "★" : "☆";
+            }
+            
+            offreData.favori = newFavori;
+            button.dataset.offre = JSON.stringify(offreData);
+        });
+    });
+</script>

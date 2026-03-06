@@ -4,63 +4,102 @@ import Layout from '../../layouts/Layout.astro';
 import OffreCard from '../../components/OffreCard.astro';
 import { getOffres } from '../../js/backend.mjs';
 
-const offre = await getOffres();
+// Récupération initiale de toutes les offres (Collection: maison)
+let offres = await getOffres();
+let message = '';
+
+// Logique de filtrage par prix côté serveur (POST)
+if (Astro.request.method === "POST") {
+    const data = await Astro.request.formData();
+    const minPrix = data.get("minPrix") ? parseInt(data.get("minPrix") as string) : null;
+    const maxPrix = data.get("maxPrix") ? parseInt(data.get("maxPrix") as string) : null;
+
+    if (minPrix !== null && maxPrix !== null) {
+        if (minPrix >= 0 && maxPrix > minPrix) {
+            // Filtrage utilisant le champ 'prix'
+            offres = offres.filter((offre) => offre.prix >= minPrix && offre.prix <= maxPrix);
+            
+            if (offres.length === 0) {
+                message = `Aucun bien disponible entre ${minPrix}€ et ${maxPrix}€`;
+            } else {
+                message = `Résultats : ${offres.length} bien(s) trouvé(s)`;
+            }
+        } else {
+            message = "Erreur : Le prix maximum doit être supérieur au prix minimum.";
+        }
+    } else {
+        message = "Veuillez remplir les deux champs de prix pour filtrer.";
+    }
+}
 ---
 
 <Layout titre="Offres">
-    <div class="max-w-7xl mx-auto p-6">
-        <h1 class="text-4xl font-bold text-slate-800 mb-8">Nos Offres </h1>
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-5xl font-light uppercase tracking-tighter mb-12 text-black">Nos Biens.</h1>
 
-        <div class="flex flex-wrap gap-4 mb-8">
-            <button id="favori-button" class="bg-slate-800 hover:bg-indigo-600 text-white font-semibold py-2 px-6 rounded-full transition-all duration-300 shadow-md flex items-center gap-2">
-                <span>✨</span> Afficher les favoris
+        <form action="/offres" method="POST" class="flex flex-wrap gap-6 mb-12 py-8 border-y border-gray-100">
+            <div class="flex items-center gap-4">
+                <div class="flex flex-col">
+                    <label class="text-[9px] uppercase tracking-widest text-gray-400 mb-1">Prix Min</label>
+                    <input type="number" name="minPrix" placeholder="0" min="0" required
+                           class="text-[10px] tracking-widest uppercase border-b border-gray-200 focus:border-black p-2 bg-transparent outline-none transition-colors w-32" />
+                </div>
+                <span class="text-gray-300 mt-4">—</span>
+                <div class="flex flex-col">
+                    <label class="text-[9px] uppercase tracking-widest text-gray-400 mb-1">Prix Max</label>
+                    <input type="number" name="maxPrix" placeholder="1000000" min="1" required
+                           class="text-[10px] tracking-widest uppercase border-b border-gray-200 focus:border-black p-2 bg-transparent outline-none transition-colors w-32" />
+                </div>
+            </div>
+            <input type="submit" value="Filtrer" class="mt-4 bg-black text-white text-[10px] uppercase tracking-[0.2em] font-bold py-2 px-10 hover:bg-gray-800 transition-all cursor-pointer h-fit self-end" />
+        </form>
+
+        <div class="flex flex-wrap gap-4 mb-12">
+            <button id="favori-button" class="border border-black text-black text-[10px] uppercase tracking-[0.2em] font-bold py-2 px-6 hover:bg-black hover:text-white transition-all">
+                Afficher les favoris
             </button>
-
-            <a href="/offres/add" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-full transition-all duration-300 shadow-md flex items-center gap-2">
-    <span class="text-white">➕</span> Ajouter une offre
-</a>
+            <a href="/offres/add" class="bg-black text-white text-[10px] uppercase tracking-widest border border-black px-5 py-2 hover:bg-white hover:text-black transition-all duration-300">
+               Ajouter une offre
+            </a>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {offre.map((offre) => (
-                <div 
-                    class="offre flex flex-col bg-white border border-gray-200 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden group hover:-translate-y-1" 
-                    data-favori={offre.favori ? offre.favori.toString() : "false"}
-                >
+        {message && (
+            <div class={`mb-12 p-4 text-[10px] uppercase tracking-[0.2em] border ${message.includes('Erreur') ? 'border-gray-200 text-gray-400' : 'border-black text-black'}`}>
+                {message}
+            </div>
+        )}
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            {offres.map((offre) => (
+                <div class="offre transition-opacity duration-500" data-favori={offre.favori?.toString() || "false"}>
                     <OffreCard offre={offre} />
                 </div>
             ))}
         </div>
     </div>
 
-    <div class="flex justify-center my-8">
-        <a href="/offres/surface/150" class="group relative inline-flex items-center justify-center px-8 py-3 font-bold text-white transition-all duration-200 bg-indigo-600 font-pj rounded-xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-600 hover:bg-indigo-700 shadow-lg">
-            Explorer les maisons de +150 m²
-            <svg class="w-5 h-5 ml-2 -mr-1 transition-transform group-hover:translate-x-1" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-            </svg>
-        </a>
-    </div>
-
     <script>
         const button = document.getElementById('favori-button');
         let showOnlyFavorites = false;
+        
         button?.addEventListener('click', () => {
             showOnlyFavorites = !showOnlyFavorites;
-            const offres = document.querySelectorAll('.offre') as NodeListOf<HTMLElement>;
-            offres.forEach(offre => {
-                const isFavori = offre.dataset.favori === 'true';   
+            const offresElements = document.querySelectorAll('.offre') as NodeListOf<HTMLElement>;
+            
+            offresElements.forEach(el => {
+                // Utilisation du champ 'favori' passé via data-attribute
+                const isFavori = el.dataset.favori === 'true';   
                 if (showOnlyFavorites && !isFavori) {
-                    offre.style.display = 'none';
+                    el.style.display = 'none';
                 } else {
-                    offre.style.display = ''; 
+                    el.style.display = '';
                 }
             });
 
             if (button) {
-                button.innerHTML = showOnlyFavorites 
-                    ? '<span>🏠</span> Afficher tout' 
-                    : '<span>✨</span> Afficher les favoris';
+                button.textContent = showOnlyFavorites ? 'Afficher tout' : 'Afficher les favoris';
+                button.classList.toggle('bg-black');
+                button.classList.toggle('text-white');
             }
         });
     </script>

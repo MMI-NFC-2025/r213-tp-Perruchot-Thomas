@@ -12,80 +12,110 @@ if (!offre) {
 }
 ---
 
-<Layout titre={offre.nom_maison}>
-  <main class="max-w-6xl mx-auto px-4 py-12">
+<Layout titre={offre.nomMaison}>
+  <div class="max-w-6xl mx-auto">
     
-    <a href="/offres" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 font-medium mb-6 transition-all group">
-      <span class="mr-2 transition-transform group-hover:-translate-x-1">←</span> 
-      Voir toutes les offres
+    <a href="/offres" class="inline-flex items-center text-[10px] uppercase tracking-[0.2em] font-bold text-black hover:text-gray-400 mb-10 transition-colors group">
+      <span class="mr-3 transition-transform group-hover:-translate-x-1">←</span> 
+      Retour aux offres
     </a>
 
-    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
+    <div class="bg-white border border-gray-100 overflow-hidden relative">
       
-      <div class="grid grid-cols-3 gap-1 w-full aspect-[21/9] bg-slate-200 overflow-hidden relative">
-        
-        {offre.favori && (
-          <span class="absolute top-4 left-4 z-20 bg-white/90 backdrop-blur-sm text-pink-500 px-3 py-1 rounded-full text-sm font-bold shadow-md">
-            ★ Favori
-          </span>
-        )}
+      <button 
+          class="favoriteButton absolute top-6 left-6 z-30 bg-black text-white p-3 rounded-full hover:scale-110 transition-transform shadow-lg"
+          data-offre={JSON.stringify(offre)}
+      >
+          <img 
+              id="favorite-icon" 
+              src={offre.favori ? "/favorite_filled.png" : "/favorite.png"} 
+              alt="Favorite Icon" 
+              class="w-5 h-5 invert" 
+          />
+      </button>
 
+      <div class="grid grid-cols-3 gap-[1px] w-full aspect-[21/9] bg-gray-100 overflow-hidden relative border-b border-gray-100">
+        
         <PbImage 
             record={offre} 
-            recordImage={offre.images[0]} 
-            class="w-full h-full object-cover col-span-2" 
+            recordImage={offre.image[0]} 
+            class="w-full h-full object-cover grayscale transition-all duration-700 hover:grayscale-0 col-span-2" 
         />
 
-        <div class="grid grid-rows-2 gap-1 h-full">
+        <div class="grid grid-rows-2 gap-[1px] h-full">
             <PbImage 
                 record={offre} 
-                recordImage={offre.images[1]} 
-                class="w-full h-full object-cover" 
+                recordImage={offre.image[1]} 
+                class="w-full h-full object-cover grayscale transition-all duration-700 hover:grayscale-0" 
             />
             <PbImage 
                 record={offre} 
-                recordImage={offre.images[2]} 
-                class="w-full h-full object-cover" 
+                recordImage={offre.image[2]} 
+                class="w-full h-full object-cover grayscale transition-all duration-700 hover:grayscale-0" 
             />
         </div>
       </div>
 
-      <div class="p-8 md:p-12">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
+      <div class="p-8 md:p-16">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-8 mb-16">
           <div>
-            <h1 class="text-4xl font-black text-slate-900 tracking-tight">
-              {offre.nom_maison}
+            <h1 class="text-5xl font-light uppercase tracking-tighter text-black">
+              {offre.nomMaison}
             </h1>
-            <p class="text-lg text-slate-500 mt-2 flex items-center">
-              <span class="text-indigo-500 mr-2">📍</span> {offre.adresse}
+            <p class="text-xs uppercase tracking-[0.2em] text-gray-400 mt-4">
+               {offre.adresse || "Adresse non communiquée"}
             </p>
           </div>
-          <div class="bg-indigo-600 px-8 py-4 rounded-2xl shadow-lg shadow-indigo-100">
-             <span class="text-3xl font-black text-white">{offre.prix} €</span>
+          <div class="border-l border-black pl-8">
+             <span class="text-4xl font-light text-black tracking-tighter">{offre.prix.toLocaleString()} €</span>
           </div>
         </div>
 
-        <hr class="border-slate-100 mb-8" />
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
-          <div class="bg-slate-50 p-4 rounded-xl text-center">
-            <span class="block text-slate-400 text-sm uppercase font-semibold tracking-wider">Surface</span>
-            <span class="text-xl font-bold text-slate-800">{offre.surface} m²</span>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-gray-100 border border-gray-100">
+          <div class="bg-white p-8 text-center">
+            <span class="block text-gray-400 text-[10px] uppercase font-bold tracking-widest mb-2">Surface</span>
+            <span class="text-xl font-light text-black">{offre.surface} m²</span>
           </div>
-          <div class="bg-slate-50 p-4 rounded-xl text-center">
-            <span class="block text-slate-400 text-sm uppercase font-semibold tracking-wider">Chambres</span>
-            <span class="text-xl font-bold text-slate-800">{offre.nombre_chambre}</span>
+          <div class="bg-white p-8 text-center">
+            <span class="block text-gray-400 text-[10px] uppercase font-bold tracking-widest mb-2">Chambres</span>
+            <span class="text-xl font-light text-black">{offre.nbChambres}</span>
           </div>
-          <div class="bg-slate-50 p-4 rounded-xl text-center">
-            <span class="block text-slate-400 text-sm uppercase font-semibold tracking-wider">Salles de bain</span>
-            <span class="text-xl font-bold text-slate-800">{offre.nombre_salle_de_bain}</span>
+          <div class="bg-white p-8 text-center">
+            <span class="block text-gray-400 text-[10px] uppercase font-bold tracking-widest mb-2">Salles de bain</span>
+            <span class="text-xl font-light text-black">{offre.nbSdb}</span>
           </div>
-          <div class="bg-slate-50 p-4 rounded-xl text-center">
-            <span class="block text-slate-400 text-sm uppercase font-semibold tracking-wider">Date</span>
-            <span class="text-xl font-bold text-slate-800">{new Date(offre.created).toLocaleDateString()}</span>
+          <div class="bg-white p-8 text-center">
+            <span class="block text-gray-400 text-[10px] uppercase font-bold tracking-widest mb-2">Publication</span>
+            <span class="text-xl font-light text-black">{new Date(offre.created).toLocaleDateString()}</span>
           </div>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 </Layout>
+
+<script>
+    //@ts-nocheck
+    import { setFavori } from "../../js/backend.mjs";
+    
+    const favoriteButtons = document.querySelectorAll(".favoriteButton");
+
+    favoriteButtons.forEach(button => {
+        button.addEventListener('click', async (e) => {
+            e.preventDefault(); 
+            
+            const offreData = JSON.parse(button.dataset.offre || '{}');
+            const newFavori = !offreData.favori;
+
+            await setFavori(offreData);
+
+            const favIcon = button.querySelector('#favorite-icon');
+            if (favIcon) {
+                favIcon.src = newFavori ? "/favorite_filled.png" : "/favorite.png";
+            }
+            
+            offreData.favori = newFavori;
+            button.dataset.offre = JSON.stringify(offreData);
+        });
+    });
+</script>

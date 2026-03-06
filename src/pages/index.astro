@@ -3,6 +3,25 @@ import '../styles/global.css'
 import Layout from '../layouts/Layout.astro';
 ---
 	<Layout titre="Accueil">
-    <h1>Accueil</h1> 
+    <div class="max-w-7xl mx-auto px-4 py-12">
+        <hr class="border-gray-100 my-20" />
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div class="group border border-gray-100 p-12 hover:border-black transition-all duration-500">
+                <h3 class="text-xs uppercase tracking-[0.3em] font-bold text-gray-400 mb-4">Catalogue complet</h3>
+                <p class="text-2xl font-light mb-8 uppercase tracking-tighter">Découvrez l'intégralité de nos propriétés d'exception.</p>
+                <a href="/offres" class="inline-block text-[10px] uppercase tracking-[0.2em] font-bold border-b border-black pb-1 group-hover:text-gray-400 group-hover:border-gray-400 transition-all">
+                    Explorer les offres →
+                </a>
+            </div>
+
+            <div class="group border border-gray-100 p-12 hover:border-black transition-all duration-500">
+                <h3 class="text-xs uppercase tracking-[0.3em] font-bold text-gray-400 mb-4">Accompagnement</h3>
+                <p class="text-2xl font-light mb-8 uppercase tracking-tighter">Rencontrez nos agents experts pour votre projet.</p>
+                <a href="/Agent" class="inline-block text-[10px] uppercase tracking-[0.2em] font-bold border-b border-black pb-1 group-hover:text-gray-400 group-hover:border-gray-400 transition-all">
+                    Voir nos agents →
+                </a>
+            </div>
+        </section>
+    </div>
 </Layout>
-</html>

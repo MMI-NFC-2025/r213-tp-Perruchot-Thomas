@@ -1,0 +1,54 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import OffreCard from "../../components/OffreCard.astro";
+import { getAgent } from "../../js/backend.mjs";
+import '../../styles/global.css';
+
+const { id } = Astro.params;
+const agent = await getAgent(id);
+
+if (!agent) {
+    return Astro.redirect('/404');
+}
+const offresAssociees = (agent.expand?.relation as any[]) || [];
+---
+
+<Layout title={`Offres de ${agent.nom}`}>
+    <div class="max-w-7xl mx-auto px-8 py-12">
+        <a href="/Agent" class="inline-flex items-center text-[10px] uppercase tracking-[0.2em] font-bold text-black hover:text-gray-400 mb-10 transition-colors group">
+            <span class="mr-3 transition-transform group-hover:-translate-x-1">←</span> 
+            Retour à la liste
+        </a>
+        
+        <header class="mb-16 border-b border-gray-100 pb-12">
+            <h1 class="text-5xl font-light uppercase tracking-tighter text-black mb-4">
+                {agent.prenom} {agent.nom}.
+            </h1>
+            <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">
+                Contact direct — {agent.email}
+            </p>
+        </header>
+
+        <section>
+            <h2 class="text-sm uppercase tracking-[0.15em] font-bold text-black mb-10">
+                Biens en gestion ({offresAssociees.length})
+            </h2>
+            
+            {offresAssociees.length > 0 ? (
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    {offresAssociees.map((maison) => (
+                        <div class="offre">
+                            <OffreCard offre={maison} />
+                        </div>
+                    ))}
+                </div>
+            ) : (
+                <div class="py-20 border border-gray-100 text-center">
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">
+                        Cet agent n'a aucune offre associée pour le moment.
+                    </p>
+                </div>
+            )}
+        </section>
+    </div>
+</Layout>

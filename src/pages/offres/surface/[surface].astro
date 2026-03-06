@@ -9,30 +9,35 @@ const offres = await getOffresParSurface(surface);
 ---
 
 <Layout titre={`Maisons > ${surface} m²`}>
-    <main class="max-w-6xl mx-auto px-4 py-8">
-        <header class="mb-10 text-center">
-            <h1 class="text-3xl font-extrabold text-slate-900 sm:text-4xl mb-4">
-                Maisons de plus de <span class="text-indigo-600">{surface} m²</span>
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <a href="/offres" class="inline-flex items-center text-[10px] uppercase tracking-[0.2em] font-bold text-black hover:text-gray-400 mb-10 transition-colors group">
+            <span class="mr-3 transition-transform group-hover:-translate-x-1">←</span> 
+            Retour aux offres
+        </a>
+
+        <header class="mb-12">
+            <h1 class="text-5xl font-light uppercase tracking-tighter text-black mb-4">
+                Espaces > {surface} m².
             </h1>
-            <p class="text-slate-600">Découvrez nos propriétés spacieuses sélectionnées pour vous.</p>
+            <p class="text-[10px] uppercase tracking-widest text-gray-400">
+                Découvrez nos propriétés spacieuses sélectionnées pour vous.
+            </p>
         </header>
 
         {offres.length > 0 ? (
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                 {offres.map((offre) => (
-                    <OffreCard offre={offre} />
+                    <div class="offre" data-favori={offre.favori?.toString() || "false"}>
+                        <OffreCard offre={offre} />
+                    </div>
                 ))}
             </div>
         ) : (
-            <div class="text-center py-20 bg-slate-50 rounded-2xl border-2 border-dashed border-slate-200">
-                <p class="text-slate-500 text-lg">Aucune offre ne correspond à cette surface pour le moment.</p>
+            <div class="py-20 border border-gray-100 text-center">
+                <p class="text-[10px] uppercase tracking-[0.2em] text-gray-400">
+                    Aucune offre ne correspond à cette surface pour le moment.
+                </p>
             </div>
         )}
-
-        <div class="mt-12 text-center">
-            <a href="/offres" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 hover:scale-105">
-                ← Retour à toutes les offres
-            </a>
-        </div>
     </main>
 </Layout>

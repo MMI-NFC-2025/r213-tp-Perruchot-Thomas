@@ -1,12 +1,13 @@
 ---
+/* src/components/PbImage.astro */
 import { getImageUrl } from '../js/backend.mjs';
 import { Image } from "astro:assets";
 
 const {
   record,
   recordImage,
-  width = 400,   
-  height = 300, 
+  width = 800,   
+  height = 600, 
   class: className, 
 } = Astro.props;
 
@@ -16,9 +17,10 @@ const imageURL = await getImageUrl(record, recordImage);
 {imageURL && 
     <Image
         src={imageURL}
-        alt={record.nom_maison || 'Image de la maison'}
+        alt={record.nomMaison || 'Image de la maison'}
         width={width}
         height={height}
         class={className}
+        loading="lazy"
     />
 }
